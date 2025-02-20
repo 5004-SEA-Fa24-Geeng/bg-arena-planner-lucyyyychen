@@ -8,6 +8,55 @@ This document is meant to provide a tool for you to demonstrate the design proce
 
 Place your class diagrams below. Make sure you check the file in the browser on github.com to make sure it is rendering correctly. If it is not, you will need to fix it. As a reminder, here is a link to tools that can help you create a class diagram: [Class Resources: Class Design Tools](https://github.com/CS5004-khoury-lionelle/Resources?tab=readme-ov-file#uml-design-tools)
 
+```mermaid
+---
+title: Board Game Area - Game Planner
+---
+classDiagram
+    IGameList ..> BoardGame : "uses"
+    GamesLoader ..> BoardGame : "uses"
+    ConsoleApp ..> IGameList : "uses"
+    ConsoleApp ..> IPlanner : "uses"
+    GamesLoader ..> GameData : "uses"
+    
+    GameList ..|> IGameList : "implements"
+    Planner ..|> IPlanner : "implements"
+
+
+    
+    class BoardGame{
+        
+    }
+    class BGArenaPlanner{
+        <<final>>
+    }
+    class ConsoleApp{
+        
+    }
+    class GamesLoader{
+        
+    }
+    class IGameList {
+        <<interface>>
+    }
+    class IPlanner {
+        <<interface>>
+    }
+    class GameList {
+        
+    }
+    class Planner {
+        
+    }
+    class GameData{
+        <<enumeration>>
+    }
+    class Operations{
+        <<enumeration>>
+    }
+    
+```
+
 ### Provided Code
 
 Provide a class diagram for the provided code as you read through it.  For the classes you are adding, you will create them as a separate diagram, so for now, you can just point towards the interfaces for the provided code diagram.

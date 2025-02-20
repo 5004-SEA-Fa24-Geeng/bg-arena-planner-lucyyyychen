@@ -15,7 +15,7 @@ import java.util.List;
  * be used to store a list of games that the user has selected/wants to play.
  * 
  * A few things to note about the GameList
- * * Values are unique / no duplicates (based on BoardGame.equals/equality)
+ * * Values are unique / no duplicates (based on BoardGame.equals/equality)  // use hashSet!
  * * It will return values in Case Insensitive ascending order of game Name for
  * any method
  * that returns a list of games or strings.

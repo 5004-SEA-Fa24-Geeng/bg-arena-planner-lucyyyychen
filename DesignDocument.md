@@ -13,14 +13,24 @@ Place your class diagrams below. Make sure you check the file in the browser on 
 title: Board Game Area - Game Planner
 ---
 classDiagram
-    IGameList ..> BoardGame : "uses"
-    GamesLoader ..> BoardGame : "uses"
+    BGArenaPlanner ..> IPlanner : "uses"
+    BGArenaPlanner ..> IGameList : "uses"
+    
+    BGArenaPlanner ..> GamesLoader : "uses"
+    BGArenaPlanner ..> ConsoleApp : "uses"
     ConsoleApp ..> IGameList : "uses"
     ConsoleApp ..> IPlanner : "uses"
+
+    IPlanner  <|.. Planner : "implements"
+    IGameList <|.. GameList : "implements"
+    
+    
+    IGameList ..> BoardGame : "uses"
+    GamesLoader ..> BoardGame : "uses"
     GamesLoader ..> GameData : "uses"
     
-    GameList ..|> IGameList : "implements"
-    Planner ..|> IPlanner : "implements"
+
+    Planner ..> Operations : "uses" 
 
     class BoardGame{
         - name: String

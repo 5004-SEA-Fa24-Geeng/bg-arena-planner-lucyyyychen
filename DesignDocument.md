@@ -24,13 +24,18 @@ classDiagram
     IPlanner  <|.. Planner : "implements"
     IGameList <|.. GameList : "implements"
     
-    
     IGameList ..> BoardGame : "uses"
     GamesLoader ..> BoardGame : "uses"
+    Planner ..> Operations : "uses"
+    Planner ..> Filter : "uses"
+    Planner ..> Sort : "uses"
+    Planner ..> GameData : "uses"
+
+    
     GamesLoader ..> GameData : "uses"
     
-
-    Planner ..> Operations : "uses" 
+    
+    
 
     class BoardGame{
         - name: String
@@ -162,6 +167,15 @@ classDiagram
         + fromOperator(String operator)$: Operations
         + getOperatorFromStr(String str)$: Operations
 
+    }
+    class Filter{
+        - filterText: String
+        + filterStream(String filterText): Stream<List>
+    }
+    class Sort{
+        - sortOn: String
+        - isAscending: boolean
+        + sortStream(String sortOn, boolean isAscending): Stream<List>
     }
     
 ```

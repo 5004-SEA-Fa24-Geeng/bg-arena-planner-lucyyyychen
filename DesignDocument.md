@@ -8,6 +8,234 @@ This document is meant to provide a tool for you to demonstrate the design proce
 
 Place your class diagrams below. Make sure you check the file in the browser on github.com to make sure it is rendering correctly. If it is not, you will need to fix it. As a reminder, here is a link to tools that can help you create a class diagram: [Class Resources: Class Design Tools](https://github.com/CS5004-khoury-lionelle/Resources?tab=readme-ov-file#uml-design-tools)
 
+
+
+### Provided Code
+
+Provide a class diagram for the provided code as you read through it.  
+For the classes you are adding, you will create them as a separate diagram, 
+so for now, you can just point towards the interfaces for the provided code diagram.
+
+```mermaid
+classDiagram
+    BGArenaPlanner ..> IPlanner : "uses"
+    BGArenaPlanner ..> IGameList : "uses"
+    
+    BGArenaPlanner ..> GamesLoader : "uses"
+    BGArenaPlanner ..> ConsoleApp : "uses"
+    
+    ConsoleApp ..> IGameList : "uses"
+    ConsoleApp ..> IPlanner : "uses"
+
+
+    
+    IGameList ..> BoardGame : "uses"
+    GamesLoader ..> BoardGame : "uses"
+    GamesLoader ..> GameData : "uses"
+    
+    
+    
+
+
+    class BGArenaPlanner{
+        <<final>>
+        - DEFAULT_COLLECTION$: String
+        - BGArenaPlanner()
+        + main(String[] args)$: void
+    }
+    class ConsoleApp{
+        - IN: Scanner
+        - DEFAULT_FILENAME: String
+        - RND: Random
+        - current: Scanner
+        - gameList: IGameList
+        - planner: IPlanner
+        
+        + start(): void
+        - randomNumber(): void
+        - processHelp(): void
+        - processFilter(): void
+        - printFilterStream(Stream<BoardGame> games, GameData sortON): void
+        - processListCommands(): void
+        - printCurrentList(): void
+        - nextCommand(): ConsoleText
+        - remainder(): String
+        - getInput(String format, Object ...)$: String
+        - printOutput(String format, Object...)$: void
+        - ConsoleText: enum
+            - CTEXT$: Properties
+            + toString(): String
+            + fromString(String str)$: ConsoleText
+    }
+    class GamesLoader{
+        - DELIMITER$: String
+        - GamesLoader(): ...
+        + loadGamesFile(String filename)$: Set<BoardGame>
+        - toBoardGame(String line, Map<GameData, Integer> columnMap)$: BoardGame
+        - processHeader(String header)$: Map<GameData, Integer>
+    }
+    class BoardGame{
+        - name: String
+        - id: int
+        - minPlayers: int
+        - maxPlayers: int
+        - maxPlayTime: int
+        - minPlayTime: int
+        - difficulty: double
+        - rank: int
+        - averageRating: double
+        - yearPublished: int
+        + getName(): String
+        + getId(): int
+        + getMinPlayers(): int
+        + getMaxPlayers(): int
+        + getMaxPlayTime(): int
+        + getMinPlayTime(): int
+        + getDifficulty(): double
+        + getRank(): int
+        + getRating(): double
+        + getYearPublished(): int
+        + toStringWithInfo(GameData col): String
+        + toString(): String
+        + equals(Object obj): boolean
+        + hashCode(): int
+        + main(String[] args)$: void
+    }
+    class IGameList {
+        <<interface>>
+        ADD_ALL: String
+        getGameNames(): List<String>
+        clear(): void
+        count(): int
+        saveGame(String filename): void
+        addToList(String str, Stream<BoardGame> filtered): void
+        removeFromList(String str): void
+    }
+    class IPlanner {
+        <<interface>>
+        filter(String filter): Stream<BoardGame>
+        filter(String filter, GameData sortOn): Stream<BoardGame>
+        filter(String filter, GameData sortOn, boolean ascending): Stream<BoardGame>
+        reset():void
+    }
+    class GameData{
+        <<enumeration>>
+        NAME("objectname")
+        ID("objectid")
+        RATING("average")
+        DIFFICULTY("avgweight")
+        RANK("rank")
+        MIN_PLAYERS("minplayers")
+        MAX_PLAYERS("maxplayers")
+        MIN_TIME("minplaytime")
+        MAX_TIME("maxplaytime")
+        YEAR("yearpublished")
+
+        - columnName: String
+        + getColumnName(): String
+        + fromColumnName(String columnName)$: GameData
+        + fromString(String name)$: GameData
+    }
+    
+
+```
+
+### Your Plans/Design
+
+Create a class diagram for the classes you plan to create. This is your initial design, and it is okay if it changes. Your starting points are the interfaces. 
+
+```mermaid
+
+classDiagram
+
+    IPlanner  <|.. Planner : "implements"
+    IGameList <|.. GameList : "implements"
+    
+    Planner ..> Filter : "uses"
+    Planner ..> Sort : "uses"
+    Planner ..> GameData : "uses"
+    Filter ..> Operations : "uses"
+    Sort ..> Operations : "uses"
+    
+
+    class IGameList {
+        <<interface>>
+        ADD_ALL: String
+        getGameNames(): List<String>
+        clear(): void
+        count(): int
+        saveGame(String filename): void
+        addToList(String str, Stream<BoardGame> filtered): void
+        removeFromList(String str): void
+    }
+    class IPlanner {
+        <<interface>>
+        filter(String filter): Stream<BoardGame>
+        filter(String filter, GameData sortOn): Stream<BoardGame>
+        filter(String filter, GameData sortOn, boolean ascending): Stream<BoardGame>
+        reset():void
+    }
+    class GameList {
+        + getGameNames(): List<String>
+        + clear(): void
+        + count(): int
+        + saveGame(String filename): void
+        + addToList(String str, Stream<BoardGame> filtered): void
+        + removeFromList(String str): void
+    }
+    class Planner {
+        + filter(String filter): Stream<BoardGame>
+        + filter(String filter, GameData sortOn): Stream<BoardGame>
+        + filter(String filter, GameData sortOn, boolean ascending): Stream<BoardGame>
+        + reset(): void
+    }
+
+    class Filter{
+        - filterText: String
+        + filterStream(String filterText): Stream<List>
+    }
+    class Sort{
+        - sortOn: String
+        - isAscending: boolean
+        + sortStream(String sortOn, boolean isAscending): Stream<List>
+    }
+    class Operations{
+        <<enumeration>>
+        EQUALS("==")
+        NOT_EQUALS("!=")
+        GREATER_THAN(">")
+        LESS_THAN("<")
+        GREATER_THAN_EQUALS(">=")
+        LESS_THAN_EQUALS("<=")
+        CONTAINS("~=")
+
+        - operator: String
+        + getOperator(): String
+        + fromOperator(String operator)$: Operations
+        + getOperatorFromStr(String str)$: Operations
+
+    }
+    class GameData{
+        <<enumeration>>
+        NAME("objectname")
+        ID("objectid")
+        RATING("average")
+        DIFFICULTY("avgweight")
+        RANK("rank")
+        MIN_PLAYERS("minplayers")
+        MAX_PLAYERS("maxplayers")
+        MIN_TIME("minplaytime")
+        MAX_TIME("maxplaytime")
+        YEAR("yearpublished")
+
+        - columnName: String
+        + getColumnName(): String
+        + fromColumnName(String columnName)$: GameData
+        + fromString(String name)$: GameData
+    }
+```
+
+#### FULL UML Diagram
 ```mermaid
 ---
 title: Board Game Area - Game Planner
@@ -26,17 +254,15 @@ classDiagram
     
     IGameList ..> BoardGame : "uses"
     GamesLoader ..> BoardGame : "uses"
-    Planner ..> Operations : "uses"
+
     Planner ..> Filter : "uses"
     Planner ..> Sort : "uses"
     Planner ..> GameData : "uses"
+    Filter ..> Operations : "uses"
+    Sort ..> Operations : "uses"
 
-    
     GamesLoader ..> GameData : "uses"
     
-    
-    
-
     class BoardGame{
         - name: String
         - id: int
@@ -127,7 +353,6 @@ classDiagram
         + removeFromList(String str): void
     }
     class Planner {
-        + Planner(Set<BoardGame> games)
         + filter(String filter): Stream<BoardGame>
         + filter(String filter, GameData sortOn): Stream<BoardGame>
         + filter(String filter, GameData sortOn, boolean ascending): Stream<BoardGame>
@@ -180,18 +405,6 @@ classDiagram
     
 ```
 
-### Provided Code
-
-Provide a class diagram for the provided code as you read through it.  For the classes you are adding, you will create them as a separate diagram, so for now, you can just point towards the interfaces for the provided code diagram.
-
-
-
-### Your Plans/Design
-
-Create a class diagram for the classes you plan to create. This is your initial design, and it is okay if it changes. Your starting points are the interfaces. 
-
-
-
 
 
 ## (INITIAL DESIGN): Tests to Write - Brainstorm
@@ -208,9 +421,20 @@ Write a test (in english) that you can picture for the class diagram you have cr
 
 You should feel free to number your brainstorm. 
 
-1. Test 1..
-2. Test 2..
+12 Tests.
 
+1. Test filter(String filter) in the Planner class
+2. Test filter(String filter, GameData sortOn)  in the Planner class
+3. Test filter(String filter, GameData sortOn, boolean ascending)  in the Planner class
+4. Test reset() in the Planner class
+5. Test getGameNames() in the GameList class
+6. Test clear() in the GameList class
+7. Test count() in the GameList class
+8. Test saveGame(String filename) in the GameList class
+9. Test addToList(String str, Stream filtered) in the GameList class
+10. Test removeFromList(String str) in the GameList class
+11. Test filterStream in the Filter Class
+12. Test sortStream in the Sort class
 
 
 

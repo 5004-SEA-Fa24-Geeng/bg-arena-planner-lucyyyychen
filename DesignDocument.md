@@ -22,37 +22,136 @@ classDiagram
     GameList ..|> IGameList : "implements"
     Planner ..|> IPlanner : "implements"
 
-
-    
     class BoardGame{
-        
+        - name: String
+        - id: int
+        - minPlayers: int
+        - maxPlayers: int
+        - maxPlayTime: int
+        - minPlayTime: int
+        - difficulty: double
+        - rank: int
+        - averageRating: double
+        - yearPublished: int
+        + getName(): String
+        + getId(): int
+        + getMinPlayers(): int
+        + getMaxPlayers(): int
+        + getMaxPlayTime(): int
+        + getMinPlayTime(): int
+        + getDifficulty(): double
+        + getRank(): int
+        + getRating(): double
+        + getYearPublished(): int
+        + toStringWithInfo(GameData col): String
+        + toString(): String
+        + equals(Object obj): boolean
+        + hashCode(): int
+        + main(String[] args)$: void
     }
     class BGArenaPlanner{
         <<final>>
+        - DEFAULT_COLLECTION$: String
+        - BGArenaPlanner()
+        + main(String[] args)$: void
     }
     class ConsoleApp{
+        - IN: Scanner
+        - DEFAULT_FILENAME: String
+        - RND: Random
+        - current: Scanner
+        - gameList: IGameList
+        - planner: IPlanner
         
+        + start(): void
+        - randomNumber(): void
+        - processHelp(): void
+        - processFilter(): void
+        - printFilterStream(Stream<BoardGame> games, GameData sortON): void
+        - processListCommands(): void
+        - printCurrentList(): void
+        - nextCommand(): ConsoleText
+        - remainder(): String
+        - getInput(String format, Object ...)$: String
+        - printOutput(String format, Object...)$: void
+        - ConsoleText: enum
+            - CTEXT$: Properties
+            + toString(): String
+            + fromString(String str)$: ConsoleText
     }
     class GamesLoader{
-        
+        - DELIMITER$: String
+        - GamesLoader(): ...
+        + loadGamesFile(String filename)$: Set<BoardGame>
+        - toBoardGame(String line, Map<GameData, Integer> columnMap)$: BoardGame
+        - processHeader(String header)$: Map<GameData, Integer>
     }
     class IGameList {
         <<interface>>
+        ADD_ALL: String
+        getGameNames(): List<String>
+        clear(): void
+        count(): int
+        saveGame(String filename): void
+        addToList(String str, Stream<BoardGame> filtered): void
+        removeFromList(String str): void
     }
     class IPlanner {
         <<interface>>
+        filter(String filter): Stream<BoardGame>
+        filter(String filter, GameData sortOn): Stream<BoardGame>
+        filter(String filter, GameData sortOn, boolean ascending): Stream<BoardGame>
+        reset():void
     }
     class GameList {
-        
+        + getGameNames(): List<String>
+        + clear(): void
+        + count(): int
+        + saveGame(String filename): void
+        + addToList(String str, Stream<BoardGame> filtered): void
+        + removeFromList(String str): void
     }
     class Planner {
-        
+        + Planner(Set<BoardGame> games)
+        + filter(String filter): Stream<BoardGame>
+        + filter(String filter, GameData sortOn): Stream<BoardGame>
+        + filter(String filter, GameData sortOn, boolean ascending): Stream<BoardGame>
+        + reset(): void
     }
+    
     class GameData{
         <<enumeration>>
+        NAME("objectname")
+        ID("objectid")
+        RATING("average")
+        DIFFICULTY("avgweight")
+        RANK("rank")
+        MIN_PLAYERS("minplayers")
+        MAX_PLAYERS("maxplayers")
+        MIN_TIME("minplaytime")
+        MAX_TIME("maxplaytime")
+        YEAR("yearpublished")
+        
+        - columnName: String
+        + getColumnName(): String
+        + fromColumnName(String columnName)$: GameData
+        + fromString(String name)$: GameData
     }
     class Operations{
         <<enumeration>>
+        EQUALS("==")
+        NOT_EQUALS("!=")
+        GREATER_THAN(">")
+        LESS_THAN("<")
+        GREATER_THAN_EQUALS(">=")
+        LESS_THAN_EQUALS("<=")
+        CONTAINS("~=")
+
+        - operator: String
+        + getOperator(): String
+        + fromOperator(String operator)$: Operations
+        + getOperatorFromStr(String str)$: Operations
+
     }
     
 ```

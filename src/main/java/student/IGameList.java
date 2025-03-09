@@ -62,6 +62,7 @@ public interface IGameList {
     /**
      * Adds a game or games to the list.
      * 
+     *
      * If a single name is specified, that takes priority. However, it could also
      * use a number such
      * as 1 which would indicate game 1 from the current filtered list should be

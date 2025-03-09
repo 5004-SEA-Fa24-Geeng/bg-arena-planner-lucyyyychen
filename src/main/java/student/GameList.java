@@ -45,7 +45,8 @@ public class GameList implements IGameList {
     @Override
     public void clear() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'clear'");
+       this.listOfGames = new HashSet<>();
+//        throw new UnsupportedOperationException("Unimplemented method 'clear'");
     }
 
     @Override
@@ -61,38 +62,40 @@ public class GameList implements IGameList {
 
     @Override
     public void addToList(String str, Stream<BoardGame> filtered) throws IllegalArgumentException {
+//             * @param str      the string to parse and add games to the list.
+//             * @param filtered the filtered list to use as a basis for adding.
 
+        // Convert the input Stream to a List
         List<BoardGame> filteredList = filtered
-                .sorted(Comparator.comparing(game -> game.getName().toLowerCase())) // Ensure case-insensitive order
-                .collect(Collectors.toList());
+                // .sorted((game1, game2) -> game1.getName().toLowerCase().compareTo(game2.getName().toLowerCase()))
+                .sorted(Comparator.comparing(game -> game.getName().toLowerCase()))
+                .toList();
 
+        // Check invalid input: empty stream
         if (filteredList.isEmpty()) {
-            throw new IllegalArgumentException("No games available to add.");
+            throw new IllegalArgumentException("No games to be added.");
         }
 
+        // If "all" is specified,
+        // all games in the filtered collection should be added to the list.
         if (str.equalsIgnoreCase(ADD_ALL)) {
-            // Add all games from the filtered list
             filteredList.forEach(game -> listOfGames.add(game.getName()));
             return;
         }
 
-        // Check if the input is a valid game name
-        Optional<BoardGame> gameByName = filteredList.stream()
-                .filter(game -> game.getName().equalsIgnoreCase(str))
-                .findFirst();
-
-        if (gameByName.isPresent()) {
-            // Add the game name to the list if it matches
-            listOfGames.add(gameByName.get().getName());
-            return;
-        }
-
-        // Try parsing the input as a number or range
-        Pattern pattern = Pattern.compile("^(\\d+)(?:-(\\d+))?$"); // Matches "1" or "1-5"
+        // Handling input as a number or range by Regex
+        // Reference: https://www.w3schools.com/java/java_regex.asp
+        // both "1" and "1-5" match
+        // without `?:`, "1-5" does not match
+        // without the second `?`, "1" does not match
+        Pattern pattern = Pattern.compile("^(\\d+)(?:-(\\d+))?$");
         Matcher matcher = pattern.matcher(str);
 
         if (matcher.matches()) {
-            int startIndex = Integer.parseInt(matcher.group(1)) - 1; // Convert to zero-based index
+            // Convert a string with number(s) to zero-based index
+            int startIndex = Integer.parseInt(matcher.group(1)) - 1;
+            // if it's a range like 1-5, then extract 5 as endIndex
+            // if it's just a number like 1, then set 1 as endIndex
             int endIndex = (matcher.group(2) != null) ? Integer.parseInt(matcher.group(2)) - 1 : startIndex;
 
             if (startIndex < 0 || endIndex >= filteredList.size() || startIndex > endIndex) {
@@ -105,15 +108,61 @@ public class GameList implements IGameList {
             return;
         }
 
-        // If no valid format or match is found, add the string as a game name directly
+        // If not matching "all" or a number or a range, add the string as a game name directly
         listOfGames.add(str);
     }
 
     @Override
     public void removeFromList(String str) throws IllegalArgumentException {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeFromList'");
+
+        // Check current list of games: empty list
+        if (listOfGames.isEmpty()) {
+            throw new IllegalArgumentException("No games to be removed.");
+        }
+
+        // If all is provided, then clear should be called.
+        if (str.equalsIgnoreCase(ADD_ALL)) {
+            listOfGames.clear();
+        }
+
+
+        // str is a number or a range
+        Pattern pattern = Pattern.compile("^(\\d+)(?:-(\\d+))?$");
+        Matcher matcher = pattern.matcher(str);
+
+        if (matcher.matches()) {
+            // Convert a string with number(s) to zero-based index
+            int startIndex = Integer.parseInt(matcher.group(1)) - 1;
+            // if it's a range like 1-5, then extract 5 as endIndex
+            // if it's just a number like 1, then set 1 as endIndex
+            int endIndex = (matcher.group(2) != null) ? Integer.parseInt(matcher.group(2)) - 1 : startIndex;
+            // check if the range is out of bound
+            if (startIndex < 0 || endIndex >= listOfGames.size() || startIndex > endIndex) {
+                throw new IllegalArgumentException("Invalid input: out of range");
+            }
+
+            // Convert HashSet listOfGames to List for indexed access
+            List<String> listCopy = new ArrayList<>(listOfGames);
+            // Sort the list
+            Collections.sort(listCopy);
+            for (int i = startIndex; i <= endIndex; i++) {
+                listOfGames.remove(listCopy.get(i));
+            }
+            return;
+        }
+
+        // If not matching "all" or a number or a range,
+        // then if it's an existing name,  remove the string directly
+        // get all game names
+
+        Optional<String> gameName = listOfGames.stream()
+                .filter(game -> game.equals(str))
+                .findFirst();
+
+        if (gameName.isPresent()) {
+            listOfGames.remove(str);
+        }
+
     }
-
-
 }

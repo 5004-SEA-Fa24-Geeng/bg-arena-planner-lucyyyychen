@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 class GameListTest {
     private GameList gameList;
@@ -48,6 +49,9 @@ class GameListTest {
 
     @Test
     void clear() {
+        gameList.addToList("all", games.stream());
+        gameList.clear();
+        assertEquals(0, gameList.count());
     }
 
     @Test
@@ -69,6 +73,18 @@ class GameListTest {
         list1.addToList("Just a game", games.stream());
         assertEquals(List.of("17 days", "Chess", "Go", "Go Fish",
                         "golang", "GoRami", "Just a game", "Monopoly", "Tucano"),
+                list1.getGameNames());
+    }
+
+    // If the input is an existing game name,
+    // then the list remains the same.
+    @Test
+    void testAddToListWithExistingName() {
+        IGameList list1 = new GameList();
+        list1.addToList("all", games.stream());
+        list1.addToList("Chess", games.stream());
+        assertEquals(List.of("17 days", "Chess", "Go", "Go Fish",
+                        "golang", "GoRami", "Monopoly", "Tucano"),
                 list1.getGameNames());
     }
 
@@ -119,9 +135,91 @@ class GameListTest {
                 () -> list1.addToList("1-10", games.stream()));
         assertEquals("Invalid input: out of range", e.getMessage());
     }
-    
 
-//    @Test
-//    void removeFromList() {
-//    }
+    // Invalid games: empty stream
+    @Test
+    void testAddToListWithEmptyList() {
+        IGameList list1 = new GameList();
+        Exception e = assertThrows(IllegalArgumentException.class,
+                () -> list1.addToList("all", Stream.empty()));
+        assertEquals("No games to be added.", e.getMessage());
+    }
+
+
+
+    // If a single name is specified, that takes priority.
+    @Test
+    void testRemoveSingleGameByName() {
+        IGameList list1 = new GameList();
+        list1.addToList("all", games.stream());
+        list1.removeFromList("17 days");
+        assertEquals(List.of("Chess", "Go", "Go Fish",
+                        "golang", "GoRami", "Monopoly", "Tucano"),
+                list1.getGameNames());
+    }
+
+
+    // If "all" is specified,
+    // all games in the filtered collection should be added to the list.
+    @Test
+    void testRemoveWholeList() {
+        IGameList list1 = new GameList();
+        list1.addToList("all", games.stream());
+        list1.removeFromList("all");
+        assertEquals(0, list1.count());
+    }
+
+    // use a number such as 1
+    // which would indicate game 1 from the current filtered list added to the list.
+    @Test
+    void testRemoveFromListByIndex() {
+        // String str, Stream<BoardGame> filtered
+        IGameList list1 = new GameList();
+        list1.addToList("all", games.stream());
+        list1.removeFromList("1");
+        assertEquals(List.of("Chess", "Go", "Go Fish",
+                        "golang", "GoRami",  "Monopoly", "Tucano"),
+                list1.getGameNames());
+    }
+
+    // if 1-5 was presented,
+    // it is assumed that games 1 through 5 should be added to the list
+    @Test
+    void testRemoveFromListByRange() {
+        IGameList list1 = new GameList();
+        list1.addToList("all", games.stream());
+        list1.removeFromList("1-3");
+        assertEquals(List.of( "Go Fish", "golang", "GoRami", "Monopoly", "Tucano"),
+                list1.getGameNames());
+    }
+
+    // 1-1 type formatting is allowed, and treated as just adding a single game.
+    @Test
+    void testRemoveFromListByClosedRange() {
+        IGameList list1 = new GameList();
+        list1.addToList("all", games.stream());
+        list1.removeFromList("1-1");
+        assertEquals(List.of("Chess", "Go", "Go Fish",
+                        "golang", "GoRami", "Monopoly", "Tucano"),
+                list1.getGameNames());
+    }
+
+    // Invalid Range
+    @Test
+    void testRemoveFromListWithInvalidRange() {
+        IGameList list1 = new GameList();
+        list1.addToList("all", games.stream());
+        Exception e = assertThrows(IllegalArgumentException.class,
+                () -> list1.removeFromList("1-10"));
+        assertEquals("Invalid input: out of range", e.getMessage());
+    }
+
+    // Invalid games: empty stream
+    @Test
+    void testRemoveFromListWithEmptyList() {
+        IGameList list1 = new GameList();
+        Exception e = assertThrows(IllegalArgumentException.class,
+                () -> list1.removeFromList("all"));
+        assertEquals("No games to be removed.", e.getMessage());
+    }
 }

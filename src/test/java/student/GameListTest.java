@@ -6,14 +6,19 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 class GameListTest {
+    private GameList gameList;
     public Set<BoardGame> games;
+    private Set<String> listOfGames;
 
     @BeforeEach
     void setUp() {
+        gameList = new GameList();
         games = new HashSet<>();
         games.add(new BoardGame("17 days", 6, 1, 8, 70, 70, 9.0, 600, 9.0, 2005));
         games.add(new BoardGame("Chess", 7, 2, 2, 10, 20, 10.0, 700, 10.0, 2006));
@@ -27,7 +32,18 @@ class GameListTest {
     }
 
     @Test
-    void getGameNames() {
+    void testGetGameNames_Empty() {
+        assertTrue(gameList.getGameNames().isEmpty(), "Game list is still empty.");
+    }
+
+    @Test
+    void testGetGameNames_NotEmpty() {
+        // converts the Set<BoardGame> `games` collection into a Stream<BoardGame> to be passed to addToList()
+        gameList.addToList("all", games.stream());
+        List<String> gameNames = gameList.getGameNames();
+        assertNotNull(gameNames, "Game names list is not null");
+        List<String> expectedNames = Arrays.asList("17 days", "Chess", "Go", "Go Fish", "golang", "GoRami", "Monopoly", "Tucano");
+        assertEquals(expectedNames, gameNames);
     }
 
     @Test
@@ -36,6 +52,8 @@ class GameListTest {
 
     @Test
     void count() {
+        gameList.addToList("all", games.stream());
+        assertEquals(8, gameList.count());
     }
 
     @Test
@@ -43,7 +61,25 @@ class GameListTest {
     }
 
     @Test
-    void addToList() {
+    void testAddSingleGameToListByName() {
+        // String str, Stream<BoardGame> filtered
+        IGameList list1 = new GameList();
+        list1.addToList("all", games.stream());
+        list1.addToList("Just a game", games.stream());
+        assertEquals(List.of("17 days", "Chess", "Go", "Go Fish",
+                        "golang", "GoRami", "Just a game", "Monopoly", "Tucano"),
+                list1.getGameNames());
+    }
+
+
+
+    @Test
+    void testAddingAllToList() {
+        IGameList list1 = new GameList();
+        list1.addToList("all", games.stream());
+        assertEquals(List.of("17 days", "Chess", "Go", "Go Fish",
+                        "golang", "GoRami", "Monopoly", "Tucano"),
+                list1.getGameNames());
     }
 
     @Test
@@ -51,17 +87,25 @@ class GameListTest {
         // String str, Stream<BoardGame> filtered
         IGameList list1 = new GameList();
         list1.addToList("1", games.stream());
-        assertEquals(1, list1.count());
-        System.out.println(list1.getGameNames());
+        assertEquals(List.of("17 days"), list1.getGameNames());
     }
+
     @Test
     void addRangeOfGamesToList() {
         IGameList list1 = new GameList();
         list1.addToList("1-3", games.stream());
-//        assertEquals(1, list1.count());
-//        System.out.println(list1.getGameNames());
+        assertEquals(List.of("17 days", "Chess", "Go"), list1.getGameNames());
     }
+
+    // 1-1 type formatting is allowed, and treated as just adding a single game.
     @Test
-    void removeFromList() {
+    void addSingleGameToListByRange() {
+        IGameList list1 = new GameList();
+        list1.addToList("1-1", games.stream());
+        assertEquals(List.of("17 days"), list1.getGameNames());
     }
+
+//    @Test
+//    void removeFromList() {
+//    }
 }

@@ -29,12 +29,12 @@ public final class Filters {
         }
     }
 
-    public static boolean filterNum(int gameData, Operations op, String value) {
-        int value = Integer.parseInt(value);
-        switch (op) {
-            case EQUALS:
-                // double something
-            case GREATER_THAN:
-        }
-    }
+//    public static boolean filterNum(int gameData, Operations op, String value) {
+//        int value = Integer.parseInt(value);
+//        switch (op) {
+//            case EQUALS:
+//                // double something
+//            case GREATER_THAN:
+//
+//    }
 }

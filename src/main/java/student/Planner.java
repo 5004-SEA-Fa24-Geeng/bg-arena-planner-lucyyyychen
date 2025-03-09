@@ -13,8 +13,8 @@ public class Planner implements IPlanner {
 
     public Planner(Set<BoardGame> games) {
         this.games = games;
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented constructor 'Planner'");
+//        // TODO Auto-generated method stub
+//        throw new UnsupportedOperationException("Unimplemented constructor 'Planner'");
     }
 
     @Override

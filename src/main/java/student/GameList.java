@@ -50,8 +50,6 @@ public class GameList implements IGameList {
 
     @Override
     public int count() {
-        // TODO Auto-generated method stub
-//        throw new UnsupportedOperationException("Unimplemented method 'count'");
         return listOfGames.size();
     }
 
@@ -63,6 +61,7 @@ public class GameList implements IGameList {
 
     @Override
     public void addToList(String str, Stream<BoardGame> filtered) throws IllegalArgumentException {
+
         List<BoardGame> filteredList = filtered
                 .sorted(Comparator.comparing(game -> game.getName().toLowerCase())) // Ensure case-insensitive order
                 .collect(Collectors.toList());
@@ -97,7 +96,7 @@ public class GameList implements IGameList {
             int endIndex = (matcher.group(2) != null) ? Integer.parseInt(matcher.group(2)) - 1 : startIndex;
 
             if (startIndex < 0 || endIndex >= filteredList.size() || startIndex > endIndex) {
-                throw new IllegalArgumentException("Invalid range: out of bounds or incorrectly formatted.");
+                throw new IllegalArgumentException("Invalid input: out of range");
             }
 
             for (int i = startIndex; i <= endIndex; i++) {

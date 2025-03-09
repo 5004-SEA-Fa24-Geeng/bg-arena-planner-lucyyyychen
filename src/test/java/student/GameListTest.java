@@ -60,6 +60,7 @@ class GameListTest {
     void saveGame() {
     }
 
+    // If a single name is specified, that takes priority.
     @Test
     void testAddSingleGameToListByName() {
         // String str, Stream<BoardGame> filtered
@@ -72,7 +73,8 @@ class GameListTest {
     }
 
 
-
+    // If "all" is specified,
+    // all games in the filtered collection should be added to the list.
     @Test
     void testAddingAllToList() {
         IGameList list1 = new GameList();
@@ -82,6 +84,8 @@ class GameListTest {
                 list1.getGameNames());
     }
 
+    // use a number such as 1
+    // which would indicate game 1 from the current filtered list added to the list.
     @Test
     void testAddSingleGameToListByIndex() {
         // String str, Stream<BoardGame> filtered
@@ -90,6 +94,8 @@ class GameListTest {
         assertEquals(List.of("17 days"), list1.getGameNames());
     }
 
+    // if 1-5 was presented,
+    // it is assumed that games 1 through 5 should be added to the list
     @Test
     void addRangeOfGamesToList() {
         IGameList list1 = new GameList();
@@ -104,6 +110,16 @@ class GameListTest {
         list1.addToList("1-1", games.stream());
         assertEquals(List.of("17 days"), list1.getGameNames());
     }
+
+    // Invalid Range
+    @Test
+    void testAddToListWithInvalidRange() {
+        IGameList list1 = new GameList();
+        Exception e = assertThrows(IllegalArgumentException.class,
+                () -> list1.addToList("1-10", games.stream()));
+        assertEquals("Invalid input: out of range", e.getMessage());
+    }
+    
 
 //    @Test
 //    void removeFromList() {

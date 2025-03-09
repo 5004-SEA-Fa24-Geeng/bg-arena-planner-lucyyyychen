@@ -5,6 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.io.TempDir;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -61,7 +65,21 @@ class GameListTest {
     }
 
     @Test
-    void saveGame() {
+    void testSaveGame() throws IOException {
+        IGameList list1 = new GameList();
+
+        // Add games to list
+        list1.addToList("1-3", games.stream()); // Assume this method exists to add games
+
+        // Create a temporary file and save to the file
+        File tempFile = File.createTempFile("test_games", ".txt");
+        String filename = tempFile.getAbsolutePath();
+        list1.saveGame(filename);
+
+        assertEquals(List.of("17 days", "Chess", "Go"), Files.readAllLines(tempFile.toPath()));
+
+        // Cleanup: Delete temp file after test
+        tempFile.deleteOnExit();
     }
 
     // If a single name is specified, that takes priority.

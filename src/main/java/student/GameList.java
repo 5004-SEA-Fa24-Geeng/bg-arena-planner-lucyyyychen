@@ -1,5 +1,7 @@
 package student;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,7 +48,6 @@ public class GameList implements IGameList {
     public void clear() {
         // TODO Auto-generated method stub
        this.listOfGames = new HashSet<>();
-//        throw new UnsupportedOperationException("Unimplemented method 'clear'");
     }
 
     @Override
@@ -56,9 +57,24 @@ public class GameList implements IGameList {
 
     @Override
     public void saveGame(String filename) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'saveGame'");
+        // Convert the Set of game names to a List and sort them case-insensitively
+        List<String> listVersionGames = new ArrayList<>(listOfGames);
+        listVersionGames.sort(String.CASE_INSENSITIVE_ORDER); // Sort in case-insensitive order
+
+
+        // Use FileWriter
+        // Reference: https://www.geeksforgeeks.org/filewriter-class-in-java/
+        try (FileWriter writer = new FileWriter(filename)) {
+            for (String game : listVersionGames) {
+                writer.write(game + System.lineSeparator());
+            }
+
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing"
+                    + " to the file: " + e.getMessage());
+        }
     }
+
 
     @Override
     public void addToList(String str, Stream<BoardGame> filtered) throws IllegalArgumentException {

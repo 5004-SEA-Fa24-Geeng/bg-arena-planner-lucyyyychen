@@ -37,14 +37,14 @@ package student;
 public enum Operations {
 
     /** Operations to use. */
-    EQUALS("=="),
-    NOT_EQUALS("!="),
-    GREATER_THAN(">"),
-    LESS_THAN("<"),
-    GREATER_THAN_EQUALS(
-            ">="),
+    EQUALS("=="), NOT_EQUALS("!="),
+    /** Operations to use. */
+    GREATER_THAN(">"), LESS_THAN("<"),
+    /** Operations to use. */
+    GREATER_THAN_EQUALS(">="),
     /** Operations to use. */
     LESS_THAN_EQUALS("<="),
+    /** Operations to use. */
     CONTAINS("~=");
 
     /** The operator. */

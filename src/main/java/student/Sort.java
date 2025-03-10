@@ -6,12 +6,13 @@ public final class Sort {
     private Sort() { }
     /**
      * Returns a {@link Comparator} for sorting {@link BoardGame} objects based on the specified attribute and order.
-     * The method selects the appropriate comparison logic based on the provided {@link GameData} column (e.g., NAME, ID, RATING, etc.)
-     * and sorts the games either in ascending or descending order, depending on the {@code ascending} flag.
+     * The method selects the  comparison logic based on {@link GameData} column,
+     * and sorts the games either in ascending or descending order, depending on the {@code ascending}.
      *
-     * @param sortOn the {@link GameData} attribute to sort by (e.g., NAME, ID, RATING, etc.)
+     * @param sortOn the {@link GameData} attribute to be sorted
      * @param ascending {@code true} for ascending order, {@code false} for descending order
-     * @return a {@link Comparator} for sorting the games based on the specified criteria, or {@code null} if the column is invalid
+     * @return a {@link Comparator} for sorting the games based on the specified criteria,
+     *          or {@code null} if the column is invalid
      */
     public static Comparator<BoardGame> comparingOn(GameData sortOn, boolean ascending) {
         Comparator<BoardGame> comparator = null;
@@ -51,7 +52,7 @@ public final class Sort {
                 return null;  // if the column is invalid, return null (= no sorting)
         }
 
-        // if ascending is false, reverse the comparator for descending order
+        // if ascending is false, reverse the comparator
         if (!ascending) {
             comparator = comparator.reversed();
         }

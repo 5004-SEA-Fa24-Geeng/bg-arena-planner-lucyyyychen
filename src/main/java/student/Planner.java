@@ -14,7 +14,7 @@ public class Planner implements IPlanner {
 
     /**
      * A set of {@link BoardGame} objects representing the initial collection of games in the planner.
-     * This set is used to store the original state of the games so that the planner can revert to it if necessary.
+     * This set stores the original state of the games so that the planner can revert to it if necessary.
      */
     private Set<BoardGame> initialGames;
 
@@ -49,7 +49,8 @@ public class Planner implements IPlanner {
             filteredStream = filterSingle(s.trim(), filteredStream);
         }
 
-        return filteredStream;
+        // ensure the final stream is sorted after all filters are applied.
+        return filteredStream.sorted(Comparator.comparing(game -> game.getName().toLowerCase()));
     }
 
     private Stream<BoardGame> filterSingle(String filter, Stream<BoardGame> filteredGames) {
@@ -82,6 +83,11 @@ public class Planner implements IPlanner {
         // parts[1] = "4"
         // trim() removes any leading or trailing spaces
         String value = parts[1].trim();
+
+        // handle the filter "name~="
+        if (column == GameData.NAME && operator == Operations.CONTAINS) {
+            return filteredGames.filter(game -> game.getName().toLowerCase().contains(value.toLowerCase()));
+        }
 
         // Apply the filtering and return as a stream
         return filteredGames.filter(game -> Filters.filter(game, column, operator, value));

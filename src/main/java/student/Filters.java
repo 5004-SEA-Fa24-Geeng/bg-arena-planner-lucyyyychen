@@ -7,10 +7,10 @@ public final class Filters {
      * Filters a {@link BoardGame} object based on the specified column, operation, and value.
      *
      * @param game the {@link BoardGame} object to be filtered
-     * @param column the {@link GameData} column to filter by (e.g., NAME, ID, RATING, etc.)
-     * @param op the {@link Operations} operation to perform (e.g., EQUALS, GREATER_THAN, etc.)
+     * @param column the {@link GameData} column to be filtered (e.g., NAME, ID, RATING)
+     * @param op the {@link Operations} operation (e.g., EQUALS, GREATER_THAN)
      * @param value the value to compare against
-     * @return {@code true} if the game passes the filter; {@code false} otherwise
+     * @return if the game passes the filter (boolean)
      */
     public static boolean filter(BoardGame game, GameData column,
                                  Operations op, String value) {
@@ -48,9 +48,9 @@ public final class Filters {
      * Filters a string value based on the specified operation and value.
      *
      * @param gameData the string value of the game data to be filtered
-     * @param op the {@link Operations} operation to perform (e.g., EQUALS, CONTAINS, etc.)
+     * @param op the {@link Operations} operation (ex, EQUALS, CONTAINS)
      * @param value the value to compare against
-     * @return {@code true} if the string matches the filter criteria; {@code false} otherwise
+     * @return if the string matches the filter criteria (boolean)
      */
     public static boolean filterString(String gameData, Operations op, String value) {
         switch (op) {
@@ -69,9 +69,9 @@ public final class Filters {
      * Filters an integer value based on the specified operation and value.
      *
      * @param gameData the integer value of the game data to be filtered
-     * @param op the {@link Operations} operation to perform (e.g., GREATER_THAN, LESS_THAN, etc.)
+     * @param op the {@link Operations} operation (ex, GREATER_THAN, LESS_THAN)
      * @param value the value to compare against
-     * @return {@code true} if the integer matches the filter criteria; {@code false} otherwise
+     * @return if the integer matches the filter criteria (boolean)
      */
     public static boolean filterInt(int gameData, Operations op, String value) {
         int parsedValue = Integer.parseInt(value);
@@ -97,9 +97,9 @@ public final class Filters {
      * Filters a double value based on the specified operation and value.
      *
      * @param gameData the double value of the game data to be filtered
-     * @param op the {@link Operations} operation to perform (e.g., GREATER_THAN, LESS_THAN, etc.)
+     * @param op the {@link Operations} operation (ex. GREATER_THAN, LESS_THAN)
      * @param value the value to compare against
-     * @return {@code true} if the double matches the filter criteria; {@code false} otherwise
+     * @return if the double matches the filter criteria (boolean)
      */
     public static boolean filterDouble(double gameData, Operations op, String value) {
         double parsedValue = Double.parseDouble(value);

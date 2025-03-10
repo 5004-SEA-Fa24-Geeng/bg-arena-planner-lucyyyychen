@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.HashSet;
 
@@ -69,7 +68,9 @@ public class GameList implements IGameList {
         File file = new File(filename);
         File parentDirectory = file.getParentFile();
         if (parentDirectory != null && !parentDirectory.exists()) {
-            parentDirectory.mkdirs(); // Create the directory, including any necessary but nonexistent parent directories
+            // Create the directory,
+            // including any necessary but nonexistent parent directories
+            parentDirectory.mkdirs();
         }
 
         // Use FileWriter

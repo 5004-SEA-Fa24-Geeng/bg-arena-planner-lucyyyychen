@@ -39,6 +39,17 @@ class PlannerTest {
     }
 
     @Test
+        // filter1: Stream<BoardGame> filter(String filter);
+        // name~=G
+    void testFilter1ByNameContain() {
+        List<String> result = planner.filter("name~=G")
+                .map(BoardGame::getName)
+                .toList();
+        List<String> expected = List.of("Go", "Go Fish", "golang", "GoRami");
+        assertEquals(expected, result);
+    }
+
+    @Test
     // filter1: Stream<BoardGame> filter(String filter);
     void testFilter1ByTwoConditionsInTwoColumns() {
         List<String> result = planner.filter("minPlayers>4,maxPlayers<15")

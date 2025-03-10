@@ -208,6 +208,16 @@ class PlannerTest {
         assertEquals(expected, result);
     }
 
+    @Test
+    // Stream<BoardGame> filter(String filter, GameData sortOn, boolean ascending);
+    void testFilter3SortNameDesc() {
+        List<String> result = planner.filter("", GameData.NAME, false)
+                .map(BoardGame::getName)
+                .toList();
+        List<String> expected = List.of("Tucano", "Monopoly", "GoRami", "golang", "Go Fish", "Go", "Chess", "17 days");
+        assertEquals(expected, result);
+    }
+
 
     @Test
     // Resets the collection to have no filters applied.

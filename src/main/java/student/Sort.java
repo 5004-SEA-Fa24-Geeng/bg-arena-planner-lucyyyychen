@@ -19,7 +19,10 @@ public final class Sort {
 
         switch (sortOn) {
             case NAME:
-                comparator = (game1, game2) -> game1.getName().compareTo(game2.getName());
+                // Use case-insensitive comparison for NAME
+                comparator = Comparator.comparing(BoardGame::getName, String.CASE_INSENSITIVE_ORDER);
+//                comparator = (game1, game2) -> game1.getName().toLowerCase().compareTo(
+//                        game2.getName().toLowerCase());
                 break;
             case ID:
                 comparator = (game1, game2) -> Integer.compare(game1.getId(), game2.getId());
@@ -52,7 +55,7 @@ public final class Sort {
                 return null;  // if the column is invalid, return null (= no sorting)
         }
 
-        // if ascending is false, reverse the comparator
+        // If ascending is false, reverse the comparator
         if (!ascending) {
             comparator = comparator.reversed();
         }

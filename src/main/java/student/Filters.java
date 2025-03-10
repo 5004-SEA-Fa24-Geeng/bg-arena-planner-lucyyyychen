@@ -53,6 +53,10 @@ public final class Filters {
      * @return if the string matches the filter criteria (boolean)
      */
     public static boolean filterString(String gameData, Operations op, String value) {
+        // Remove spaces and convert to lowercase
+        gameData = gameData.replaceAll(" ", "").toLowerCase();
+        value = value.replaceAll(" ", "").toLowerCase();
+
         switch (op) {
             case EQUALS:
                 return gameData.equals(value);

@@ -80,23 +80,9 @@ public class Planner implements IPlanner {
             return filteredGames;
         }
 
-//        // parts[1] = "4"
-//        // trim() removes any leading or trailing spaces
-//        String value = parts[1].trim();
-//
-//        // handle the filter "name~="
-//        if (column == GameData.NAME && operator == Operations.CONTAINS) {
-//            return filteredGames.filter(game -> game.getName().toLowerCase().contains(value.toLowerCase()));
-//        }
-        // Extract filter value, remove spaces, and convert to lowercase
-        String value = parts[1].replaceAll(" ", "").toLowerCase();
-
-        // **Handle `name~=` condition for substring matching, ignoring spaces**
-        if (column == GameData.NAME && operator == Operations.CONTAINS) {
-            return filteredGames.filter(game ->
-                    game.getName().replaceAll(" ", "").toLowerCase().contains(value)
-            );
-        }
+        // parts[1] = "4"
+        // trim() removes any leading or trailing spaces
+        String value = parts[1].trim();
 
         // Apply the filtering and return as a stream
         return filteredGames.filter(game -> Filters.filter(game, column, operator, value));

@@ -50,6 +50,24 @@ class PlannerTest {
         assertEquals(expected, result);
     }
 
+    @Test
+    void testFilter1ByNameEquals() {
+        List<String> result = planner.filter("name==Go")
+                .map(BoardGame::getName)
+                .toList();
+        List<String> expected = List.of("Go");
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void testFilter1ByNameNotEquals() {
+        List<String> result = planner.filter("name!=Go")
+                .map(BoardGame::getName)
+                .toList();
+        List<String> expected = List.of("17 days", "Chess", "Go Fish", "golang", "GoRami", "Monopoly", "Tucano");
+        assertEquals(expected, result);
+    }
+
 
 
     @Test

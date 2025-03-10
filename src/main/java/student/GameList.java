@@ -41,10 +41,9 @@ public class GameList implements IGameList {
         // TODO Auto-generated method stub
 
         // Convert the Set of game names to a List and sort them case-insensitively
-        List<String> listVersionGames = List.copyOf(listOfGames);
-        return listVersionGames.stream()
-                .sorted(String.CASE_INSENSITIVE_ORDER) // Sort in case-insensitive order
-                .collect(Collectors.toList()); // Collect into a List
+        List<String> listVersionGames = new ArrayList<>(listOfGames);
+        listVersionGames.sort(String.CASE_INSENSITIVE_ORDER); // Sort in case-insensitive order
+        return listVersionGames;
         }
 
 

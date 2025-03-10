@@ -84,13 +84,21 @@ public class Planner implements IPlanner {
         // trim() removes any leading or trailing spaces
         String value = parts[1].trim();
 
-        // handle the filter "name~="
+        // Apply the filtering logic based on operator
         if (column == GameData.NAME && operator == Operations.CONTAINS) {
-            return filteredGames.filter(game -> game.getName().toLowerCase().contains(value.toLowerCase()));
+            // Filter for board games whose names contain the value (case-insensitive)
+            String lowerCaseValue = value.toLowerCase();
+            return filteredGames.filter(game -> game.getName().toLowerCase().contains(lowerCaseValue));
+        } else {
+            return filteredGames.filter(game -> Filters.filter(game, column, operator, value));
         }
-
-        // Apply the filtering and return as a stream
-        return filteredGames.filter(game -> Filters.filter(game, column, operator, value));
+//        // handle the filter "name~="
+//        if (column == GameData.NAME && operator == Operations.CONTAINS) {
+//            return filteredGames.filter(game -> game.getName().toLowerCase().contains(value.toLowerCase()));
+//        }
+//
+//        // Apply the filtering and return as a stream
+//        return filteredGames.filter(game -> Filters.filter(game, column, operator, value));
     }
 
     @Override

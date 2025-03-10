@@ -42,6 +42,17 @@ class PlannerTest {
         // filter1: Stream<BoardGame> filter(String filter);
         // name~=G
     void testFilter1ByNameContain() {
+        List<String> result = planner.filter("name~=Fish")
+                .map(BoardGame::getName)
+                .toList();
+        List<String> expected = List.of("Go Fish");
+        assertEquals(expected, result);
+    }
+
+    @Test
+        // filter1: Stream<BoardGame> filter(String filter);
+        // name~=G
+    void testFilter1ByNameContain2() {
         List<String> result = planner.filter("name~=G")
                 .map(BoardGame::getName)
                 .toList();

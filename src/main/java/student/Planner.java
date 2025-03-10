@@ -80,25 +80,26 @@ public class Planner implements IPlanner {
             return filteredGames;
         }
 
-        // parts[1] = "4"
-        // trim() removes any leading or trailing spaces
-        String value = parts[1].trim();
-
-        // Apply the filtering logic based on operator
-        if (column == GameData.NAME && operator == Operations.CONTAINS) {
-            // Filter for board games whose names contain the value (case-insensitive)
-            String lowerCaseValue = value.toLowerCase();
-            return filteredGames.filter(game -> game.getName().toLowerCase().contains(lowerCaseValue));
-        } else {
-            return filteredGames.filter(game -> Filters.filter(game, column, operator, value));
-        }
+//        // parts[1] = "4"
+//        // trim() removes any leading or trailing spaces
+//        String value = parts[1].trim();
+//
 //        // handle the filter "name~="
 //        if (column == GameData.NAME && operator == Operations.CONTAINS) {
 //            return filteredGames.filter(game -> game.getName().toLowerCase().contains(value.toLowerCase()));
 //        }
-//
-//        // Apply the filtering and return as a stream
-//        return filteredGames.filter(game -> Filters.filter(game, column, operator, value));
+        // Extract filter value, remove spaces, and convert to lowercase
+        String value = parts[1].replaceAll(" ", "").toLowerCase();
+
+        // **Handle `name~=` condition for substring matching, ignoring spaces**
+        if (column == GameData.NAME && operator == Operations.CONTAINS) {
+            return filteredGames.filter(game ->
+                    game.getName().replaceAll(" ", "").toLowerCase().contains(value)
+            );
+        }
+
+        // Apply the filtering and return as a stream
+        return filteredGames.filter(game -> Filters.filter(game, column, operator, value));
     }
 
     @Override

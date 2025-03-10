@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,14 +41,16 @@ class PlannerTest {
 
     @Test
         // filter1: Stream<BoardGame> filter(String filter);
-        // name~=G
+        // name~=of
     void testFilter1ByNameContain() {
-        List<String> result = planner.filter("name~=Fish")
+        List<String> result = planner.filter("name~=of")
                 .map(BoardGame::getName)
                 .toList();
         List<String> expected = List.of("Go Fish");
         assertEquals(expected, result);
     }
+
+
 
     @Test
         // filter1: Stream<BoardGame> filter(String filter);

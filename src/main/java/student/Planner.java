@@ -2,14 +2,29 @@ package student;
 
 
 import java.util.*;
-import java.util.logging.Filter;
 import java.util.stream.Stream;
 
 
 public class Planner implements IPlanner {
+    /**
+     * A set of {@link BoardGame} objects representing the current collection of games in the planner.
+     * This set allows for efficient storage and management of games, ensuring that duplicates are not allowed.
+     */
     private Set<BoardGame> games;
+
+    /**
+     * A set of {@link BoardGame} objects representing the initial collection of games in the planner.
+     * This set is used to store the original state of the games so that the planner can revert to it if necessary.
+     */
     private Set<BoardGame> initialGames;
 
+
+    /**
+     * Constructs a new {@code Planner} with the specified set of games.
+     * The initial set of games is saved in the {@code initialGames} set for future reference.
+     *
+     * @param games a set of {@link BoardGame} objects to be managed by the planner
+     */
     public Planner(Set<BoardGame> games) {
         this.games = games;
         this.initialGames = new HashSet<>(games);

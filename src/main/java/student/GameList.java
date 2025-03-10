@@ -1,5 +1,6 @@
 package student;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -15,6 +16,10 @@ public class GameList implements IGameList {
     // return values in Case Insensitive ascending order of game Name for any method
     // returns a list of games or strings.
 
+    /**
+     * A set that holds the list of game names.
+     * The set stores game names in an unordered collection.
+     */
     private Set<String> listOfGames;
 
     /**
@@ -61,6 +66,12 @@ public class GameList implements IGameList {
         List<String> listVersionGames = new ArrayList<>(listOfGames);
         listVersionGames.sort(String.CASE_INSENSITIVE_ORDER); // Sort in case-insensitive order
 
+        // Create the parent directory if it doesn't exist
+        File file = new File(filename);
+        File parentDirectory = file.getParentFile();
+        if (parentDirectory != null && !parentDirectory.exists()) {
+            parentDirectory.mkdirs(); // Create the directory, including any necessary but nonexistent parent directories
+        }
 
         // Use FileWriter
         // Reference: https://www.geeksforgeeks.org/filewriter-class-in-java/
@@ -80,6 +91,8 @@ public class GameList implements IGameList {
     public void addToList(String str, Stream<BoardGame> filtered) throws IllegalArgumentException {
 //             * @param str      the string to parse and add games to the list.
 //             * @param filtered the filtered list to use as a basis for adding.
+        // Ensure the list of games is sorted case-insensitively
+//        listOfGames = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 
         // Convert the input Stream to a List
         List<BoardGame> filteredList = filtered

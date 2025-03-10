@@ -35,7 +35,6 @@ public interface IPlanner {
      * 
      * @param filter The filter to apply to the board games.
      * @param sortOn The column to sort the results on.
-     * @param sortOn The column to sort the results on.
      * @return A stream of board games that match the filter.
      * @see #filter(String, GameData, boolean)
      */

@@ -68,6 +68,15 @@ class PlannerTest {
         assertEquals(expected, result);
     }
 
+    @Test
+    void testFilter1ByNameGreaterThan() {
+        List<String> result = planner.filter("name>Go")
+                .map(BoardGame::getName)
+                .toList();
+        List<String> expected = List.of("Go Fish", "golang", "GoRami", "Monopoly", "Tucano");
+        assertEquals(expected, result);
+    }
+
 
 
     @Test

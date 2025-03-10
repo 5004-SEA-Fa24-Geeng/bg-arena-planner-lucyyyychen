@@ -64,6 +64,16 @@ public final class Filters {
                 return !gameData.equals(value);
             case CONTAINS:
                 return gameData.contains(value);
+            // Lexicographic comparison
+            case GREATER_THAN:  // Lexicographic comparison: gameData > value
+                return gameData.compareTo(value) > 0;
+            case LESS_THAN:  // Lexicographic comparison: gameData < value
+                return gameData.compareTo(value) < 0;
+            case GREATER_THAN_EQUALS:  // Lexicographic comparison: gameData >= value
+                return gameData.compareTo(value) >= 0;
+            case LESS_THAN_EQUALS:  // Lexicographic comparison: gameData <= value
+                return gameData.compareTo(value) <= 0;
+
             default:
                 return false;
         }
@@ -124,4 +134,6 @@ public final class Filters {
                 return false;
         }
     }
+
+
 }
